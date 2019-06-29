@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/@dagonmetric/angular-build/src/schemas/schema.json#",
+  "libs": [{
+    "extends": "ngb:lib-default",
+      "name": "ng-log-applicationinsights",
+      "root": "modules/ng-log-applicationinsights",
+      "outputPath": "dist/packages/ng-log-applicationinsights",
+      "libraryName": "ngConfig",
+      "envOverrides": {
+        "prod": {
+          "copy": [
+            "README.md",
+            "../../LICENSE"
+          ],
+          "bundles": true,
+          "packageJsonCopy": true,
+          "banner": "../banner.txt"
+        }
+      }
+    }
+  ],
+  "apps": []
+}
