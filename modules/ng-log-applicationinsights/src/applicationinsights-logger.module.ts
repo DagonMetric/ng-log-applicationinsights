@@ -17,7 +17,7 @@ import {
 } from './applicationinsights-logger-provider';
 
 /**
- * The `NGMODULE` for providing `LoggerProvider` with `ApplicationInsightsLoggerProvider`.
+ * The `NGMODULE` for providing `LOGGER_PROVIDER` with `ApplicationInsightsLoggerProvider`.
  */
 @NgModule({
     providers: [

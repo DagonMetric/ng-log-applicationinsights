@@ -1,6 +1,6 @@
-# ApplicationInsightsLoggerModule
+# Application Insights Logger Plugin
 
-[Microsoft Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [Logger](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/src/logger.ts).
+Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) integration/plugin for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - - logging, analytics and telemetry client for Angular.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ The following npm packages are required before using this module.
 
 ```typescript
 import { LogModule } from '@dagonmetric/ng-log';
-import { ApplicationInsightsWebLoggerModule } from '@dagonmetric/ng-log/applicationinsights-web';
+import { ApplicationInsightsLoggerModule } from '@dagonmetric/ng-log-applicationinsights';
 
 @NgModule({
   imports: [
@@ -25,9 +25,11 @@ import { ApplicationInsightsWebLoggerModule } from '@dagonmetric/ng-log/applicat
 
     // ng-log module
     LogModule,
-    ApplicationInsightsWebLoggerModule.withOptions({
-      instrumentationKey: 'YOUR_INSTRUMENTATION_KEY_GOES_HERE'
-      /* ...Other Configuration Options... */
+    ApplicationInsightsLoggerModule.withOptions({
+      config: {
+        instrumentationKey: 'YOUR_INSTRUMENTATION_KEY_GOES_HERE'
+        /* ...Other Configuration Options... */
+      }
     })
   ]
 })
@@ -109,5 +111,4 @@ export class AppComponent {
 }
 ```
 
-For more configuring information, see [ApplicationInsightsWebLoggerModule wiki](https://github.com/DagonMetric/ng-log/wiki/ApplicationInsightsWebLoggerModule).
-
+For more configuring information, see [ApplicationInsightsLoggerModule wiki](https://github.com/DagonMetric/ng-log/wiki/ApplicationInsightsLoggerModule).

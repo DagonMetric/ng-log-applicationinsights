@@ -5,7 +5,7 @@
       "name": "ng-log-applicationinsights",
       "root": "modules/ng-log-applicationinsights",
       "outputPath": "dist/packages/ng-log-applicationinsights",
-      "libraryName": "ngConfig",
+      "libraryName": "ngLog.applicationinsights",
       "envOverrides": {
         "prod": {
           "copy": [

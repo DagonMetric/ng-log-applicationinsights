@@ -7,13 +7,13 @@
  */
 
 import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
-import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { IApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 
 /**
  * Microsoft ApplicationInsights implementation for `Logger`.
  */
 export class ApplicationInsightsLogger extends Logger {
-    constructor(public appInsights?: ApplicationInsights) {
+    constructor(readonly name?: string, public appInsights?: IApplicationInsights) {
         super();
     }
 
@@ -32,7 +32,7 @@ export class ApplicationInsightsLogger extends Logger {
             this.appInsights.trackException({
                 exception: typeof message === 'string' ? new Error(message) : message,
                 severityLevel,
-                measurements: measurements,
+                measurements,
                 properties: extraProperties
             });
         } else {
@@ -62,7 +62,11 @@ export class ApplicationInsightsLogger extends Logger {
         const extraProperties = pageViewInfo && pageViewInfo.properties ? pageViewInfo.properties : undefined;
         const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
 
-        this.appInsights.stopTrackPage(name, uri, { ...extraProperties, ...customProperties }, measurements);
+        this.appInsights.stopTrackPage(name, uri, {
+            ...extraProperties,
+            ...customProperties,
+            measurements
+        });
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
@@ -102,7 +106,11 @@ export class ApplicationInsightsLogger extends Logger {
         const extraProperties = eventInfo && eventInfo.properties ? eventInfo.properties : undefined;
         const customProperties = ApplicationInsightsLogger.filterEventCustomProperties(eventInfo);
 
-        this.appInsights.stopTrackEvent(name, { ...extraProperties, ...customProperties }, measurements);
+        this.appInsights.stopTrackEvent(name, {
+            ...extraProperties,
+            ...customProperties,
+            measurements
+        });
     }
 
     trackEvent(eventInfo: EventInfo): void {

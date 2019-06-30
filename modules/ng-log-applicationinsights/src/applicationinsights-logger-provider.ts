@@ -36,10 +36,10 @@ export const APPLICATIONINSIGHTS_LOGGER_OPTIONS = new InjectionToken<Application
     providedIn: 'root'
 })
 export class ApplicationInsightsLoggerProvider extends Logger implements LoggerProvider {
-    private readonly _loggers = new Map<string, ApplicationInsightsLogger | null>();
     private readonly _isBrowser: boolean;
+    private readonly _appInsights?: ApplicationInsights;
+    private _initialized = false;
 
-    private _appInsights?: ApplicationInsights;
     private _config?: IConfiguration & IConfig;
     private _currentLogger?: ApplicationInsightsLogger;
 
@@ -47,41 +47,12 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
         return 'applicationinsights';
     }
 
-    set config(config: IConfiguration & IConfig) {
-        if (!this._isBrowser) {
-            return;
-        }
-
-        if (this._appInsights) {
-            this._appInsights.config = { ...this._appInsights.config, ...this._config, ...config };
-            this._config = this._appInsights.config;
-        } else {
-            this._appInsights = new ApplicationInsights({
-                config: { ...this._config, ...config }
-            });
-            this._appInsights.loadAppInsights();
-            this._config = this._appInsights.config;
-
-            this.currentLogger.appInsights = this._appInsights;
-
-            for (const pair of this._loggers) {
-                const logger = pair[1];
-                if (logger == null) {
-                    this._loggers.delete(pair[0]);
-                    continue;
-                }
-
-                logger.appInsights = this._appInsights;
-            }
-        }
-    }
-
     get currentLogger(): ApplicationInsightsLogger {
         if (this._currentLogger) {
             return this._currentLogger;
         }
 
-        this._currentLogger = new ApplicationInsightsLogger(this._appInsights);
+        this._currentLogger = new ApplicationInsightsLogger(undefined, this._appInsights);
 
         return this._currentLogger;
     }
@@ -91,30 +62,40 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
         @Optional() @Inject(ApplicationInsightsLogger) options?: ApplicationInsightsLoggerOptions) {
         super();
         this._isBrowser = isPlatformBrowser(platformId);
-        if (this._isBrowser && options && options.config) {
-            if (options.config.instrumentationKey) {
-                this._appInsights = new ApplicationInsights({
-                    config: options.config
-                });
+        this._config = options && options.config ? options.config : {
+            instrumentationKey: ''
+        };
+
+        if (this._isBrowser) {
+            this._appInsights = new ApplicationInsights({
+                config: this._config
+            });
+
+            if (this._config.instrumentationKey) {
                 this._appInsights.loadAppInsights();
                 this._config = this._appInsights.config;
-            } else {
-                this._config = options.config;
+                this._initialized = true;
             }
         }
     }
 
-    createLogger(category: string): Logger {
-        const logger = this._loggers.get(category);
-        if (logger) {
-            return logger;
+    setConfig(config: IConfiguration & IConfig): void {
+        if (this._appInsights) {
+            this._appInsights.config = { ...this._appInsights.config, ...this._config, ...config };
+            this._config = this._appInsights.config;
+
+            if (!this._initialized && this._isBrowser) {
+                this._appInsights.loadAppInsights();
+                this._config = this._appInsights.config;
+                this._initialized = true;
+            }
+        } else {
+            this._config = { ...this._config, ...config };
         }
+    }
 
-        const newLogger = new ApplicationInsightsLogger(this._appInsights);
-
-        this._loggers.set(category, newLogger);
-
-        return newLogger;
+    createLogger(category: string): Logger {
+        return new ApplicationInsightsLogger(category, this._appInsights);
     }
 
     setUserProperties(userId: string, accountId?: string): void {
