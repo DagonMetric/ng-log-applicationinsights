@@ -1,6 +1,6 @@
-# Application Insights Logger Plugin
+# Application Insights Logger Integration for Angular
 
-Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) integration/plugin for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - - logging, analytics and telemetry client for Angular.
+Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) integration/plugin for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - logging, analytics and telemetry client for Angular.
 
 [WIP]
 

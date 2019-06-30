@@ -6,6 +6,10 @@
       "root": "modules/ng-log-applicationinsights",
       "outputPath": "dist/packages/ng-log-applicationinsights",
       "libraryName": "ngLog.applicationinsights",
+      "externals": {
+        "@dagonmetric/ng-log": "ngLog",
+        "@microsoft/applicationinsights-web": "Microsoft.ApplicationInsights"
+      },
       "envOverrides": {
         "prod": {
           "copy": [
