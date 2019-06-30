@@ -13,6 +13,20 @@ The following npm packages are required before using this module.
 * @dagonmetric/ng-log >= v2.0.0
 * @microsoft/applicationinsights-web >= v2.0.1
 
+### Installation
+
+npm
+
+```bash
+npm install @dagonmetric/ng-log-applicationinsights
+```
+
+or yarn
+
+```bash
+yarn add @dagonmetric/ng-log-applicationinsights
+```
+
 ### Module Setup (app.module.ts)
 
 ```typescript
@@ -23,7 +37,7 @@ import { ApplicationInsightsLoggerModule } from '@dagonmetric/ng-log-application
   imports: [
     // Other module imports
 
-    // ng-log module
+    // ng-log modules
     LogModule,
     ApplicationInsightsLoggerModule.withOptions({
       config: {
@@ -47,7 +61,7 @@ import { LogService } from '@dagonmetric/ng-log';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(private readonly _logService: LogService) { }
 
   ngOnInit(): void {
@@ -111,4 +125,14 @@ export class AppComponent {
 }
 ```
 
+## Documentation
+
 For more configuring information, see [ApplicationInsightsLoggerModule wiki](https://github.com/DagonMetric/ng-log/wiki/ApplicationInsightsLoggerModule).
+
+## Feedback and Contributing
+
+Check out the [Contributing](https://github.com/DagonMetric/ng-log-applicationinsights/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+
+## License
+
+This repository is licensed with the [MIT](https://github.com/DagonMetric/ng-log-applicationinsights/blob/master/LICENSE) license.
