@@ -57,9 +57,13 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
         return this._currentLogger;
     }
 
+    get appInsights(): ApplicationInsights | undefined {
+        return this._appInsights;
+    }
+
     constructor(
         @Inject(PLATFORM_ID) platformId: Object,
-        @Optional() @Inject(ApplicationInsightsLogger) options?: ApplicationInsightsLoggerOptions) {
+        @Optional() @Inject(APPLICATIONINSIGHTS_LOGGER_OPTIONS) options?: ApplicationInsightsLoggerOptions) {
         super();
         this._isBrowser = isPlatformBrowser(platformId);
         this._config = options && options.config ? options.config : {
@@ -99,13 +103,13 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
     }
 
     setUserProperties(userId: string, accountId?: string): void {
-        if (this._isBrowser && this._appInsights) {
+        if (this._isBrowser && this._initialized && this._appInsights) {
             this._appInsights.setAuthenticatedUserContext(userId, accountId);
         }
     }
 
     clearUserProperties(): void {
-        if (this._isBrowser && this._appInsights) {
+        if (this._isBrowser && this._initialized && this._appInsights) {
             this._appInsights.clearAuthenticatedUserContext();
         }
     }

@@ -7,7 +7,7 @@
  */
 
 import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
-import { IApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { IApplicationInsights, IEventTelemetry, IPageViewTelemetry, SeverityLevel } from '@microsoft/applicationinsights-web';
 
 /**
  * Microsoft ApplicationInsights implementation for `Logger`.
@@ -58,15 +58,19 @@ export class ApplicationInsightsLogger extends Logger {
         }
 
         const uri = pageViewInfo && pageViewInfo.uri ? pageViewInfo.uri : undefined;
-        const measurements = pageViewInfo && pageViewInfo.measurements ? pageViewInfo.measurements : undefined;
-        const extraProperties = pageViewInfo && pageViewInfo.properties ? pageViewInfo.properties : undefined;
-        const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
 
-        this.appInsights.stopTrackPage(name, uri, {
-            ...extraProperties,
-            ...customProperties,
-            measurements
-        });
+        const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
+        const pageViewTelemetry: IPageViewTelemetry = {
+            ...customProperties
+        };
+        if (pageViewInfo && pageViewInfo.measurements) {
+            pageViewTelemetry.measurements = pageViewInfo.measurements;
+        }
+        if (pageViewInfo && pageViewInfo.properties) {
+            pageViewTelemetry.properties = pageViewInfo.properties;
+        }
+
+        this.appInsights.stopTrackPage(name, uri, pageViewTelemetry);
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
@@ -74,19 +78,25 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const name = pageViewInfo && pageViewInfo.name ? pageViewInfo.name : undefined;
-        const uri = pageViewInfo && pageViewInfo.uri ? pageViewInfo.uri : undefined;
-        const measurements = pageViewInfo && pageViewInfo.measurements ? pageViewInfo.measurements : undefined;
-        const extraProperties = pageViewInfo && pageViewInfo.properties ? pageViewInfo.properties : undefined;
         const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
 
-        this.appInsights.trackPageView({
-            ...customProperties,
-            name,
-            uri,
-            measurements,
-            properties: extraProperties
-        });
+        const pageViewTelemetry: IPageViewTelemetry = {
+            ...customProperties
+        };
+        if (pageViewInfo && pageViewInfo.name) {
+            pageViewTelemetry.name = pageViewInfo.name;
+        }
+        if (pageViewInfo && pageViewInfo.uri) {
+            pageViewTelemetry.uri = pageViewInfo.uri;
+        }
+        if (pageViewInfo && pageViewInfo.measurements) {
+            pageViewTelemetry.measurements = pageViewInfo.measurements;
+        }
+        if (pageViewInfo && pageViewInfo.properties) {
+            pageViewTelemetry.properties = pageViewInfo.properties;
+        }
+
+        this.appInsights.trackPageView(pageViewTelemetry);
     }
 
     startTrackEvent(name: string): void {
@@ -102,15 +112,14 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const measurements = eventInfo && eventInfo.measurements ? eventInfo.measurements : undefined;
-        const extraProperties = eventInfo && eventInfo.properties ? eventInfo.properties : undefined;
         const customProperties = ApplicationInsightsLogger.filterEventCustomProperties(eventInfo);
+        const extraProperties = eventInfo && eventInfo.properties ? eventInfo.properties : undefined;
+        const measurements = eventInfo && eventInfo.measurements ? eventInfo.measurements : undefined;
 
         this.appInsights.stopTrackEvent(name, {
             ...extraProperties,
-            ...customProperties,
-            measurements
-        });
+            ...customProperties
+        }, measurements);
     }
 
     trackEvent(eventInfo: EventInfo): void {
@@ -118,17 +127,19 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const name = eventInfo.name;
-        const measurements = eventInfo && eventInfo.measurements ? eventInfo.measurements : undefined;
-        const extraProperties = eventInfo && eventInfo.properties ? eventInfo.properties : undefined;
         const customProperties = ApplicationInsightsLogger.filterEventCustomProperties(eventInfo);
-
-        this.appInsights.trackEvent({
+        const eventTelemetry: IEventTelemetry = {
             ...customProperties,
-            name,
-            measurements,
-            properties: extraProperties,
-        });
+            name: eventInfo.name
+        };
+        if (eventInfo.measurements) {
+            eventTelemetry.measurements = eventInfo.measurements;
+        }
+        if (eventInfo.properties) {
+            eventTelemetry.properties = eventInfo.properties;
+        }
+
+        this.appInsights.trackEvent(eventTelemetry);
     }
 
     flush(): void {
