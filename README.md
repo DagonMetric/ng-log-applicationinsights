@@ -1,3 +1,10 @@
+[![Build Status](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_apis/build/status/DagonMetric.ng-log-applicationinsights?branchName=master)](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_build/latest?definitionId=11&branchName=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/72xfi3lbjsb97x4i/branch/master?svg=true)](https://ci.appveyor.com/project/admindagonmetriccom/ng-log-applicationinsights/branch/master)
+[![codecov](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights)
+[![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
+[![Dependency Status](https://david-dm.org/DagonMetric/ng-log-applicationinsights.svg)](https://david-dm.org/DagonMetric/ng-log-applicationinsights)
+[![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 # Application Insights Logger Integration for Angular
 
 Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) integration/plugin for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - logging, analytics and telemetry client for Angular.
