@@ -5,7 +5,7 @@
 [![Dependency Status](https://david-dm.org/DagonMetric/ng-log-applicationinsights.svg)](https://david-dm.org/DagonMetric/ng-log-applicationinsights)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# Application Insights Logger Integration for Angular
+# Microsoft Application Insights Logger Integration for Angular
 
 Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) integration/plugin for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - logging, analytics and telemetry client for Angular.
 
@@ -17,7 +17,7 @@ The following npm packages are required before using this module.
 
 * @angular/common >= v8.0.0-beta.0
 * @angular/core >= v8.0.0-beta.0
-* @dagonmetric/ng-log >= v2.0.0
+* @dagonmetric/ng-log >= v2.1.0
 * @microsoft/applicationinsights-web >= v2.0.1
 
 ### Installation
@@ -95,10 +95,10 @@ export class AppComponent implements OnInit {
     // Track custom event
     this._logService.trackEvent({
       name: 'video_auto_play_start',
-      eventLabel: 'My promotional video',
-      eventCategory: 'video_auto_play',
+      event_label: 'My promotional video',
+      event_category: 'video_auto_play',
       properties: {
-        nonInteraction: true
+        non_interaction: true
       }
     });
 
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit {
     this._logService.trackEvent({
       name: 'foo',
       measurements: {
-        avgPageLoadTime: 1
+        non_interaction: 1
       },
       properties: {
         age: 12
@@ -116,10 +116,10 @@ export class AppComponent implements OnInit {
     // Track custom event with timing
     this._logService.startTrackEvent('video_auto_play');
     this._logService.stopTrackEvent('video_auto_play', {
-      eventLabel: 'My promotional video',
-      eventCategory: 'video_auto_play',
+      event_label: 'My promotional video',
+      event_category: 'video_auto_play',
       properties: {
-        nonInteraction: true
+        non_interaction: true
       }
     });
 
