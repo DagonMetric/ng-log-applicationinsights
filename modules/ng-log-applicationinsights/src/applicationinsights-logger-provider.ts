@@ -52,7 +52,7 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
             return this._currentLogger;
         }
 
-        this._currentLogger = new ApplicationInsightsLogger(undefined, this._appInsights);
+        this._currentLogger = new ApplicationInsightsLogger('', this._appInsights);
 
         return this._currentLogger;
     }

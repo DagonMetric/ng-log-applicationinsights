@@ -7,13 +7,20 @@
  */
 
 import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
-import { IApplicationInsights, IEventTelemetry, IPageViewTelemetry, SeverityLevel } from '@microsoft/applicationinsights-web';
+import {
+    IApplicationInsights,
+    IEventTelemetry,
+    IExceptionTelemetry,
+    IPageViewTelemetry,
+    ITraceTelemetry,
+    SeverityLevel
+} from '@microsoft/applicationinsights-web';
 
 /**
  * Microsoft ApplicationInsights implementation for `Logger`.
  */
 export class ApplicationInsightsLogger extends Logger {
-    constructor(readonly name?: string, public appInsights?: IApplicationInsights) {
+    constructor(readonly name: string, public appInsights?: IApplicationInsights) {
         super();
     }
 
@@ -23,24 +30,28 @@ export class ApplicationInsightsLogger extends Logger {
         }
 
         const severityLevel = ApplicationInsightsLogger.toSeverityLevel(logLevel);
-        const measurements = logInfo && logInfo.measurements ?
-            logInfo.measurements : undefined;
-        const extraProperties = logInfo && logInfo.properties ?
-            logInfo.properties : undefined;
 
         if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
-            this.appInsights.trackException({
+            const exceptionTelemetry: IExceptionTelemetry = {
                 exception: typeof message === 'string' ? new Error(message) : message,
                 severityLevel,
-                measurements,
-                properties: extraProperties
-            });
+            };
+            if (logInfo && logInfo.measurements) {
+                exceptionTelemetry.measurements = logInfo.measurements;
+            }
+            if (logInfo && logInfo.properties) {
+                exceptionTelemetry.properties = logInfo.properties;
+            }
+            this.appInsights.trackException(exceptionTelemetry);
         } else {
-            this.appInsights.trackTrace({
+            const traceTelemetry: ITraceTelemetry = {
                 message: typeof message === 'string' ? message : `${message}`,
-                severityLevel,
-                properties: extraProperties
-            });
+                severityLevel
+            };
+            if (logInfo && logInfo.properties) {
+                traceTelemetry.properties = logInfo.properties;
+            }
+            this.appInsights.trackTrace(traceTelemetry);
         }
     }
 
@@ -57,20 +68,39 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const uri = pageViewInfo && pageViewInfo.uri ? pageViewInfo.uri : undefined;
+        if (pageViewInfo) {
+            // tslint:disable-next-line: no-any
+            let properties: { [key: string]: any } | undefined;
 
-        const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
-        const pageViewTelemetry: IPageViewTelemetry = {
-            ...customProperties
-        };
-        if (pageViewInfo && pageViewInfo.measurements) {
-            pageViewTelemetry.measurements = pageViewInfo.measurements;
-        }
-        if (pageViewInfo && pageViewInfo.properties) {
-            pageViewTelemetry.properties = pageViewInfo.properties;
-        }
+            if (pageViewInfo.properties) {
+                properties = { ...pageViewInfo.properties };
+            }
+            if (pageViewInfo.ref_uri != null) {
+                properties = properties || {};
+                properties.refUri = pageViewInfo.ref_uri;
+            }
+            if (pageViewInfo.page_type != null) {
+                properties = properties || {};
+                properties.pageType = pageViewInfo.page_type;
+            }
+            if (pageViewInfo.is_logged_in != null) {
+                properties = properties || {};
+                properties.isLoggedIn = pageViewInfo.is_logged_in;
+            }
+            if (pageViewInfo.measurements) {
+                properties = properties || {};
+                properties.measurements = pageViewInfo.measurements;
+            }
 
-        this.appInsights.stopTrackPage(name, uri, pageViewTelemetry);
+            if (properties) {
+                this.appInsights.stopTrackPage(name, pageViewInfo.uri, properties);
+            } else {
+                this.appInsights.stopTrackPage(name, pageViewInfo.uri);
+            }
+
+        } else {
+            this.appInsights.stopTrackPage(name);
+        }
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
@@ -78,22 +108,30 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const customProperties = ApplicationInsightsLogger.filterPageViewCustomProperties(pageViewInfo);
+        const pageViewTelemetry: IPageViewTelemetry = {};
 
-        const pageViewTelemetry: IPageViewTelemetry = {
-            ...customProperties
-        };
-        if (pageViewInfo && pageViewInfo.name) {
-            pageViewTelemetry.name = pageViewInfo.name;
-        }
-        if (pageViewInfo && pageViewInfo.uri) {
-            pageViewTelemetry.uri = pageViewInfo.uri;
-        }
-        if (pageViewInfo && pageViewInfo.measurements) {
-            pageViewTelemetry.measurements = pageViewInfo.measurements;
-        }
-        if (pageViewInfo && pageViewInfo.properties) {
-            pageViewTelemetry.properties = pageViewInfo.properties;
+        if (pageViewInfo) {
+            if (pageViewInfo.name != null) {
+                pageViewTelemetry.name = pageViewInfo.name;
+            }
+            if (pageViewInfo.uri != null) {
+                pageViewTelemetry.uri = pageViewInfo.uri;
+            }
+            if (pageViewInfo.ref_uri != null) {
+                pageViewTelemetry.refUri = pageViewInfo.ref_uri;
+            }
+            if (pageViewInfo.page_type != null) {
+                pageViewTelemetry.pageType = pageViewInfo.page_type;
+            }
+            if (pageViewInfo.is_logged_in != null) {
+                pageViewTelemetry.isLoggedIn = pageViewInfo.is_logged_in;
+            }
+            if (pageViewInfo.measurements) {
+                pageViewTelemetry.measurements = pageViewInfo.measurements;
+            }
+            if (pageViewInfo.properties) {
+                pageViewTelemetry.properties = pageViewInfo.properties;
+            }
         }
 
         this.appInsights.trackPageView(pageViewTelemetry);
@@ -112,14 +150,28 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const customProperties = ApplicationInsightsLogger.filterEventCustomProperties(eventInfo);
-        const extraProperties = eventInfo && eventInfo.properties ? eventInfo.properties : undefined;
-        const measurements = eventInfo && eventInfo.measurements ? eventInfo.measurements : undefined;
+        if (eventInfo) {
+            // tslint:disable-next-line: no-any
+            let properties: { [key: string]: any } = {};
 
-        this.appInsights.stopTrackEvent(name, {
-            ...extraProperties,
-            ...customProperties
-        }, measurements);
+            if (eventInfo.properties) {
+                properties = { ...eventInfo.properties };
+            }
+            if (eventInfo.event_category) {
+                properties.event_category = eventInfo.event_category;
+            }
+            if (eventInfo.event_label) {
+                properties.event_label = eventInfo.event_label;
+            }
+
+            if (eventInfo.measurements) {
+                this.appInsights.stopTrackEvent(name, properties, eventInfo.measurements);
+            } else {
+                this.appInsights.stopTrackEvent(name, properties);
+            }
+        } else {
+            this.appInsights.stopTrackEvent(name);
+        }
     }
 
     trackEvent(eventInfo: EventInfo): void {
@@ -127,9 +179,7 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const customProperties = ApplicationInsightsLogger.filterEventCustomProperties(eventInfo);
         const eventTelemetry: IEventTelemetry = {
-            ...customProperties,
             name: eventInfo.name
         };
         if (eventInfo.measurements) {
@@ -137,6 +187,14 @@ export class ApplicationInsightsLogger extends Logger {
         }
         if (eventInfo.properties) {
             eventTelemetry.properties = eventInfo.properties;
+        }
+        if (eventInfo.event_category) {
+            eventTelemetry.properties = eventTelemetry.properties || {};
+            eventTelemetry.properties.event_category = eventInfo.event_category;
+        }
+        if (eventInfo.event_label) {
+            eventTelemetry.properties = eventTelemetry.properties || {};
+            eventTelemetry.properties.event_label = eventInfo.event_label;
         }
 
         this.appInsights.trackEvent(eventTelemetry);
@@ -162,45 +220,5 @@ export class ApplicationInsightsLogger extends Logger {
         } else {
             return SeverityLevel.Verbose;
         }
-    }
-
-    private static filterPageViewCustomProperties(
-        properties?: PageViewTimingInfo,
-        excludeKeys: (keyof PageViewInfo | 'name')[]
-            = ['name', 'uri', 'customMap', 'measurements', 'properties']): { [key: string]: string } | undefined {
-        if (!properties) {
-            return undefined;
-        }
-        // tslint:disable-next-line: no-any
-        const mappedProperties: { [key: string]: any } = {};
-        const props = properties;
-
-        Object.keys(props)
-            .filter((key: keyof PageViewInfo) => excludeKeys.length === 0 || !excludeKeys.includes(key))
-            .forEach((key: keyof PageViewTimingInfo) => {
-                mappedProperties[key] = props[key];
-            });
-
-        return mappedProperties;
-    }
-
-    private static filterEventCustomProperties(
-        properties?: EventTimingInfo,
-        excludeKeys: (keyof EventInfo | 'name')[]
-            = ['name', 'customMap', 'measurements', 'properties']): { [name: string]: string } | undefined {
-        if (!properties) {
-            return undefined;
-        }
-        // tslint:disable-next-line: no-any
-        const mappedProperties: { [name: string]: any } = {};
-        const props = properties;
-
-        Object.keys(props)
-            .filter((key: keyof EventInfo) => excludeKeys.length === 0 || !excludeKeys.includes(key))
-            .forEach((key: keyof EventTimingInfo) => {
-                mappedProperties[key] = props[key];
-            });
-
-        return mappedProperties;
     }
 }
