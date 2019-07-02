@@ -17,9 +17,11 @@ describe('ApplicationInsightsLoggerProvider', () => {
                 ApplicationInsightsLoggerProvider,
                 {
                     provide: APPLICATIONINSIGHTS_LOGGER_OPTIONS,
-                    useValue: { config: {
-                        instrumentationKey: 'TEST'
-                    } }
+                    useValue: {
+                        config: {
+                            instrumentationKey: 'TEST'
+                        }
+                    }
                 }
             ]
         });
@@ -40,12 +42,31 @@ describe('ApplicationInsightsLoggerProvider', () => {
         expect((logger as ApplicationInsightsLogger).name).toBe('test');
     });
 
-    it("should work with 'setUserProperties'", () => {
+    it("should able to call 'setConfig' with  with eager initialization", () => {
         const appInsights = loggerProvider.appInsights as ApplicationInsights;
         loggerProvider.setConfig({
             instrumentationKey: 'TESTING'
         });
         expect(appInsights.config.instrumentationKey).toBe('TESTING');
+    });
+
+    it("should able to call 'setConfig' with lazy initialization", () => {
+        const loggerProvider2 = new ApplicationInsightsLoggerProvider('browser');
+        loggerProvider2.setConfig({
+            instrumentationKey: 'TESTING'
+        });
+
+        const appInsights = loggerProvider2.appInsights as ApplicationInsights;
+        expect(appInsights.config.instrumentationKey).toBe('TESTING');
+    });
+
+    it("should able to call 'setConfig' with non platform browser", () => {
+        const loggerProvider2 = new ApplicationInsightsLoggerProvider('server');
+        loggerProvider2.setConfig({
+            instrumentationKey: 'TESTING'
+        });
+
+        expect(loggerProvider2.appInsights).toBeUndefined();
     });
 
     it("should work with 'setUserProperties'", () => {
@@ -56,6 +77,10 @@ describe('ApplicationInsightsLoggerProvider', () => {
         const accountId = 'account1';
         loggerProvider.setUserProperties(userId, accountId);
         expect(appInsights.setAuthenticatedUserContext).toHaveBeenCalledWith(userId, accountId);
+
+        // Coverage only, do nothing
+        const loggerProvider2 = new ApplicationInsightsLoggerProvider('server');
+        loggerProvider2.setUserProperties(userId, accountId);
     });
 
     it("should work with 'clearUserProperties'", () => {
@@ -64,6 +89,10 @@ describe('ApplicationInsightsLoggerProvider', () => {
 
         loggerProvider.clearUserProperties();
         expect(appInsights.clearAuthenticatedUserContext).toHaveBeenCalled();
+
+        // Coverage only, do nothing
+        const loggerProvider2 = new ApplicationInsightsLoggerProvider('server');
+        loggerProvider2.clearUserProperties();
     });
 
     it("should work with 'log'", () => {
@@ -117,7 +146,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         spyOn(currentLogger, 'stopTrackEvent');
 
         const name = 'event1';
-        const eventInfo = { eventCategory: 'test' };
+        const eventInfo = { event_category: 'test' };
         loggerProvider.stopTrackEvent(name, eventInfo);
         expect(currentLogger.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
     });

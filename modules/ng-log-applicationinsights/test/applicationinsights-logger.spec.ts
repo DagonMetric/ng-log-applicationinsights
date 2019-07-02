@@ -28,20 +28,19 @@ describe('ApplicationInsightsLogger', () => {
 
     it("should work with 'log' method", () => {
         const message = 'This is a message.';
+        const err = new Error(message);
         const properties = { key1: 'value1' };
 
-        logger.log(LogLevel.Trace, message, { properties });
+        logger.log(LogLevel.Trace, err);
         expect(appInsights.trackTrace).toHaveBeenCalledWith({
-            message,
-            severityLevel: SeverityLevel.Verbose,
-            properties
+            message: `${err}`,
+            severityLevel: SeverityLevel.Verbose
         });
 
-        logger.log(LogLevel.Debug, message, { properties });
+        logger.log(LogLevel.Debug, message);
         expect(appInsights.trackTrace).toHaveBeenCalledWith({
             message,
-            severityLevel: SeverityLevel.Verbose,
-            properties
+            severityLevel: SeverityLevel.Verbose
         });
 
         logger.log(LogLevel.Info, message, { properties });
@@ -58,95 +57,300 @@ describe('ApplicationInsightsLogger', () => {
             properties
         });
 
-        const err = new Error(message);
+        logger.log(LogLevel.Error, message);
+        expect(appInsights.trackException).toHaveBeenCalledWith({
+            exception: err,
+            severityLevel: SeverityLevel.Error
+        });
 
-        logger.log(LogLevel.Error, err, {
+        logger.log(LogLevel.Error, err, { properties });
+        expect(appInsights.trackException).toHaveBeenCalledWith({
+            exception: err,
+            severityLevel: SeverityLevel.Error,
+            properties
+        });
+
+        logger.log(LogLevel.Critical, err, {
             measurements: {
-                avgPageLoadTime: 1
+                avg_page_load_time: 1
             },
             properties
         });
         expect(appInsights.trackException).toHaveBeenCalledWith({
             exception: err,
-            severityLevel: SeverityLevel.Error,
+            severityLevel: SeverityLevel.Critical,
             measurements: {
-                avgPageLoadTime: 1
+                avg_page_load_time: 1
             },
             properties
         });
     });
 
     it("should work with 'startTrackPage' and 'stopTrackPage'", () => {
-        const pageTitle = 'home';
+        logger.startTrackPage('page1');
+        logger.stopTrackPage('page1');
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page1');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page1');
 
-        logger.startTrackPage(pageTitle);
-        expect(appInsights.startTrackPage).toHaveBeenCalledWith(pageTitle);
+        logger.startTrackPage('page2');
+        logger.stopTrackPage('page2', {
+            uri: '/page2'
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page2');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page2', '/page2');
 
-        logger.stopTrackPage(pageTitle, {
-            uri: '/home',
+        logger.startTrackPage('page3');
+        logger.stopTrackPage('page3', {
+            uri: '/page3',
+            ref_uri: 'https://somewhere.com/'
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page3');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page3', '/page3', {
+            refUri: 'https://somewhere.com/'
+        });
+
+        logger.startTrackPage('page4');
+        logger.stopTrackPage('page4', {
+            uri: '/page4',
+            page_type: 'testPage',
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page4');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page4', '/page4', {
+            pageType: 'testPage'
+        });
+
+        logger.startTrackPage('page5');
+        logger.stopTrackPage('page5', {
+            uri: '/page5',
+            is_logged_in: true
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page5');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page5', '/page5', {
+            isLoggedIn: true
+        });
+
+        logger.startTrackPage('page6');
+        logger.stopTrackPage('page6', {
+            uri: '/page6',
+            properties: {
+                key1: 'value1'
+            }
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page6');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page6', '/page6', {
+            key1: 'value1'
+        });
+
+        logger.startTrackPage('page7');
+        logger.stopTrackPage('page7', {
+            uri: '/page7',
             measurements: {
-                avgPageLoadTime: 1
+                avg_page_load_time: 1
+            }
+        });
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page7');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page7', '/page7', {
+            measurements: {
+                avg_page_load_time: 1
+            }
+        });
+
+        logger.startTrackPage('page8');
+        logger.stopTrackPage('page8', {
+            uri: '/page8',
+            ref_uri: 'https://somewhere.com/',
+            page_type: 'testPage',
+            is_logged_in: false,
+            measurements: {
+                avg_page_load_time: 1
             },
             properties: {
                 key1: 'value1'
             }
         });
-        expect(appInsights.stopTrackPage).toHaveBeenCalledWith(pageTitle, '/home', {
+        expect(appInsights.startTrackPage).toHaveBeenCalledWith('page8');
+        expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page8', '/page8', {
             measurements: {
-                avgPageLoadTime: 1
+                avg_page_load_time: 1
             },
-            properties: {
-                key1: 'value1'
-            }
+            key1: 'value1',
+            refUri: 'https://somewhere.com/',
+            pageType: 'testPage',
+            isLoggedIn: false
         });
     });
 
     it("should work with 'trackPageView'", () => {
-        const pageViewInfo = {
+        logger.trackPageView();
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({});
+
+        logger.trackPageView({
+            name: 'page1'
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            name: 'page1'
+        });
+
+        logger.trackPageView({
+            uri: '/page2'
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            uri: '/page2'
+        });
+
+        logger.trackPageView({
+            ref_uri: 'https://somewhere.com/'
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            refUri: 'https://somewhere.com/'
+        });
+
+        logger.trackPageView({
+            page_type: 'testPage',
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            pageType: 'testPage',
+        });
+
+        logger.trackPageView({
+            is_logged_in: true
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            isLoggedIn: true
+        });
+
+        logger.trackPageView({
+            properties: {
+                key1: 'value1'
+            }
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            properties: {
+                key1: 'value1'
+            }
+        });
+
+        logger.trackPageView({
             name: 'home',
             uri: '/home',
+            ref_uri: 'https://somewhere.com/',
+            page_type: 'testPage',
+            is_logged_in: false,
             measurements: {
                 avgPageLoadTime: 1
             },
             properties: {
                 key1: 'value1'
             }
-        };
-        logger.trackPageView(pageViewInfo);
-        expect(appInsights.trackPageView).toHaveBeenCalledWith(pageViewInfo);
+        });
+        expect(appInsights.trackPageView).toHaveBeenCalledWith({
+            name: 'home',
+            uri: '/home',
+            refUri: 'https://somewhere.com/',
+            pageType: 'testPage',
+            isLoggedIn: false,
+            measurements: {
+                avgPageLoadTime: 1
+            },
+            properties: {
+                key1: 'value1'
+            }
+        });
     });
 
     it("should work with 'startTrackEvent' and 'stopTrackEvent'", () => {
-        const eventName = 'event1';
-        logger.startTrackEvent(eventName);
-        expect(appInsights.startTrackEvent).toHaveBeenCalledWith(eventName);
+        logger.startTrackEvent('event1');
+        logger.stopTrackEvent('event1');
+        expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event1');
+        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event1');
 
-        logger.stopTrackEvent(eventName, {
-            eventCategory: 'test',
+        logger.startTrackEvent('event2');
+        logger.stopTrackEvent('event2', {
+            event_category: 'test'
+        });
+        expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event2');
+        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event2', {
+            event_category: 'test'
+        });
+
+        logger.startTrackEvent('event3');
+        logger.stopTrackEvent('event3', {
+            event_label: 'test'
+        });
+        expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event3');
+        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event3', {
+            event_label: 'test'
+        });
+
+        logger.stopTrackEvent('event4', {
+            event_category: 'test',
+            event_label: 'test',
+            properties: {
+                key1: 'value1'
+            },
+            measurements: {
+                avg_page_load_time: 1
+            }
+        });
+        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event4', {
+            event_category: 'test',
+            event_label: 'test',
+            key1: 'value1'
+        }, { avg_page_load_time: 1 });
+    });
+
+    it("should work with 'trackEvent'", () => {
+        logger.trackEvent({
+            name: 'event1'
+        });
+        expect(appInsights.trackEvent).toHaveBeenCalledWith({
+            name: 'event1'
+        });
+
+        logger.trackEvent({
+            name: 'event2',
+            event_label: 'test'
+        });
+        expect(appInsights.trackEvent).toHaveBeenCalledWith({
+            name: 'event2',
+            properties: {
+                event_label: 'test'
+            }
+        });
+
+        logger.trackEvent({
+            name: 'event3',
+            event_category: 'test'
+        });
+        expect(appInsights.trackEvent).toHaveBeenCalledWith({
+            name: 'event3',
+            properties: {
+                event_category: 'test'
+            }
+        });
+
+        logger.trackEvent({
+            name: 'event4',
+            event_label: 'test',
+            event_category: 'test',
+            measurements: {
+                avgPageLoadTime: 1
+            },
+            properties: {
+                key1: 'value1'
+            }
+        });
+        expect(appInsights.trackEvent).toHaveBeenCalledWith({
+            name: 'event4',
+            properties: {
+                key1: 'value1',
+                event_label: 'test',
+                event_category: 'test'
+            },
             measurements: {
                 avgPageLoadTime: 1
             }
         });
-        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith(eventName, {
-            eventCategory: 'test'
-        }, {
-                avgPageLoadTime: 1
-            });
-    });
-
-    it("should work with 'trackEvent'", () => {
-        const eventInfo = {
-            name: 'event1',
-            eventCategory: 'test',
-            measurements: {
-                avgPageLoadTime: 1
-            },
-            properties: {
-                key1: 'value1'
-            }
-        };
-        logger.trackEvent(eventInfo);
-        expect(appInsights.trackEvent).toHaveBeenCalledWith(eventInfo);
     });
 
     it("should work with 'flush'", () => {
@@ -154,7 +358,7 @@ describe('ApplicationInsightsLogger', () => {
         expect(appInsights.flush).toHaveBeenCalled();
 
         // Coverage only
-        const loggerWithoutAppInsights = new ApplicationInsightsLogger();
+        const loggerWithoutAppInsights = new ApplicationInsightsLogger('');
         loggerWithoutAppInsights.log(LogLevel.None, 'This message will not be tracked.');
         loggerWithoutAppInsights.startTrackPage('page1');
         loggerWithoutAppInsights.stopTrackPage('page1');
