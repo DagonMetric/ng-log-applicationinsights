@@ -1,7 +1,7 @@
 {
   "name": "@dagonmetric/ng-log-applicationinsights",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Microsoft Azure Application Insights integration/plugin for @dagonmetric/ng-log - logging, analytics and telemetry client for Angular.",
+  "description": "Angular Azure Application Insights implementation for @dagonmetric/ng-log - logging, analytics and telemetry client for Angular applications.",
   "author": "",
   "license": "",
   "repository": "",
@@ -9,7 +9,8 @@
   "keywords": [
     "ng-log",
     "angular-application-insights",
-    "microsoft-applicationinsights-web",
+    "microsoft-applicationinsights",
+    "azure-application-insights",
     "application-insights",
     "angular-log-service",
     "angular-logging",
