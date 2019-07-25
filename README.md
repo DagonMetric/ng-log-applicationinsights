@@ -1,4 +1,4 @@
-# Angular Azure Application Insights Implementation for NG-LOG
+# Angular Application Insights Implementation for NG-LOG
 
 [![Build Status](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_apis/build/status/DagonMetric.ng-log-applicationinsights?branchName=master)](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_build/latest?definitionId=11&branchName=master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights)
