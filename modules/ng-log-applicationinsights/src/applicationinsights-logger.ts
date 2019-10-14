@@ -157,12 +157,6 @@ export class ApplicationInsightsLogger extends Logger {
             if (eventInfo.properties) {
                 properties = { ...eventInfo.properties };
             }
-            if (eventInfo.event_category) {
-                properties.event_category = eventInfo.event_category;
-            }
-            if (eventInfo.event_label) {
-                properties.event_label = eventInfo.event_label;
-            }
 
             if (eventInfo.measurements) {
                 this.appInsights.stopTrackEvent(name, properties, eventInfo.measurements);
@@ -187,14 +181,6 @@ export class ApplicationInsightsLogger extends Logger {
         }
         if (eventInfo.properties) {
             eventTelemetry.properties = eventInfo.properties;
-        }
-        if (eventInfo.event_category) {
-            eventTelemetry.properties = eventTelemetry.properties || {};
-            eventTelemetry.properties.event_category = eventInfo.event_category;
-        }
-        if (eventInfo.event_label) {
-            eventTelemetry.properties = eventTelemetry.properties || {};
-            eventTelemetry.properties.event_label = eventInfo.event_label;
         }
 
         this.appInsights.trackEvent(eventTelemetry);
