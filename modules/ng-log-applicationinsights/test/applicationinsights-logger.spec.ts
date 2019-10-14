@@ -12,16 +12,16 @@ describe('ApplicationInsightsLogger', () => {
     beforeEach(() => {
         appInsights = jasmine.createSpyObj<ApplicationInsights>(
             'appInsights', [
-                'startTrackPage',
-                'stopTrackPage',
-                'trackPageView',
-                'startTrackEvent',
-                'stopTrackEvent',
-                'trackEvent',
-                'trackTrace',
-                'trackException',
-                'flush'
-            ]);
+            'startTrackPage',
+            'stopTrackPage',
+            'trackPageView',
+            'startTrackEvent',
+            'stopTrackEvent',
+            'trackEvent',
+            'trackTrace',
+            'trackException',
+            'flush'
+        ]);
 
         logger = new ApplicationInsightsLogger('test', appInsights);
     });
@@ -264,27 +264,7 @@ describe('ApplicationInsightsLogger', () => {
         expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event1');
         expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event1');
 
-        logger.startTrackEvent('event2');
-        logger.stopTrackEvent('event2', {
-            event_category: 'test'
-        });
-        expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event2');
-        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event2', {
-            event_category: 'test'
-        });
-
-        logger.startTrackEvent('event3');
-        logger.stopTrackEvent('event3', {
-            event_label: 'test'
-        });
-        expect(appInsights.startTrackEvent).toHaveBeenCalledWith('event3');
-        expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event3', {
-            event_label: 'test'
-        });
-
         logger.stopTrackEvent('event4', {
-            event_category: 'test',
-            event_label: 'test',
             properties: {
                 key1: 'value1'
             },
@@ -293,8 +273,6 @@ describe('ApplicationInsightsLogger', () => {
             }
         });
         expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event4', {
-            event_category: 'test',
-            event_label: 'test',
             key1: 'value1'
         }, { avg_page_load_time: 1 });
     });
@@ -309,30 +287,6 @@ describe('ApplicationInsightsLogger', () => {
 
         logger.trackEvent({
             name: 'event2',
-            event_label: 'test'
-        });
-        expect(appInsights.trackEvent).toHaveBeenCalledWith({
-            name: 'event2',
-            properties: {
-                event_label: 'test'
-            }
-        });
-
-        logger.trackEvent({
-            name: 'event3',
-            event_category: 'test'
-        });
-        expect(appInsights.trackEvent).toHaveBeenCalledWith({
-            name: 'event3',
-            properties: {
-                event_category: 'test'
-            }
-        });
-
-        logger.trackEvent({
-            name: 'event4',
-            event_label: 'test',
-            event_category: 'test',
             measurements: {
                 avgPageLoadTime: 1
             },
@@ -341,11 +295,9 @@ describe('ApplicationInsightsLogger', () => {
             }
         });
         expect(appInsights.trackEvent).toHaveBeenCalledWith({
-            name: 'event4',
+            name: 'event2',
             properties: {
-                key1: 'value1',
-                event_label: 'test',
-                event_category: 'test'
+                key1: 'value1'
             },
             measurements: {
                 avgPageLoadTime: 1
