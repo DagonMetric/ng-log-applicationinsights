@@ -1,11 +1,12 @@
 # Angular Application Insights Implementation for NG-LOG
 
 [![Build Status](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_apis/build/status/DagonMetric.ng-log-applicationinsights?branchName=master)](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_build/latest?definitionId=11&branchName=master)
+[![CircleCI](https://circleci.com/gh/DagonMetric/ng-log-applicationinsights.svg?style=svg)](https://circleci.com/gh/DagonMetric/ng-log-applicationinsights)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights)
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log) - logging, analytics and telemetry client for Angular applications.
+Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log.
 
 ## Getting Started
 
@@ -15,7 +16,7 @@ The following npm packages are required before using this module.
 
 * @angular/common >= v8.0.0-beta.0
 * @angular/core >= v8.0.0-beta.0
-* @dagonmetric/ng-log >= v2.1.0
+* @dagonmetric/ng-log >= v2.2.0
 * @microsoft/applicationinsights-web >= v2.0.1
 
 ### Installation
@@ -93,8 +94,6 @@ export class AppComponent implements OnInit {
     // Track custom event
     this._logService.trackEvent({
       name: 'video_auto_play_start',
-      event_label: 'My promotional video',
-      event_category: 'video_auto_play',
       properties: {
         non_interaction: true
       }
@@ -114,8 +113,6 @@ export class AppComponent implements OnInit {
     // Track custom event with timing
     this._logService.startTrackEvent('video_auto_play');
     this._logService.stopTrackEvent('video_auto_play', {
-      event_label: 'My promotional video',
-      event_category: 'video_auto_play',
       properties: {
         non_interaction: true
       }
@@ -134,6 +131,7 @@ export class AppComponent implements OnInit {
 
 * [ng-log](https://github.com/DagonMetric/ng-log) - Angular logging and telemetry service abstractions and some implementations
 * [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Angular Google Analytics (gtag.js) logger implementation for `ng-log`
+* [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Firebase Analytics implementation for `ng-log`
 
 ## Feedback and Contributing
 
