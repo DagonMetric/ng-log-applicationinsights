@@ -1,11 +1,17 @@
 {
   "name": "@dagonmetric/ng-log-applicationinsights",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Angular Azure Application Insights implementation for @dagonmetric/ng-log - logging, analytics and telemetry client for Angular applications.",
-  "author": "",
-  "license": "",
-  "repository": "",
-  "homepage": "",
+  "description": "Angular Azure Application Insights implementation for @dagonmetric/ng-log.",
+  "author": "DagonMetric",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dagonmetric/ng-log-applicationinsights.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dagonmetric/ng-log-applicationinsights/issues"
+  },
+  "homepage": "https://github.com/dagonmetric/ng-log-applicationinsights",
   "keywords": [
     "ng-log",
     "angular-application-insights",
@@ -31,7 +37,7 @@
   "peerDependencies": {
     "@angular/common": "^8.0.0-beta.0",
     "@angular/core": "^8.0.0-beta.0",
-    "@dagonmetric/ng-log": "^2.1.0",
+    "@dagonmetric/ng-log": "^2.2.0",
     "@microsoft/applicationinsights-web": "^2.0.1"
   }
 }
