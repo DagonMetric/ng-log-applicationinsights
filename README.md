@@ -6,7 +6,7 @@
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log.
+Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [@dagonmetric/ng-log](https://github.com/DagonMetric/ng-log).
 
 ## Getting Started
 
