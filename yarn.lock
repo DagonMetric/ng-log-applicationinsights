@@ -1109,10 +1109,15 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/jasmine@*", "@types/jasmine@^3.4.4":
+"@types/jasmine@*":
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.4.4.tgz#be3fbd73e72725edb44e6f7f509cd52912d1550c"
   integrity sha512-+/sHcTPyDS1JQacDRRRWb+vNrjBwnD+cKvTaWlxlJ/uOOFvzCkjOwNaqVjYMLfsjzNi0WtDH9RyReDXPG1Cdug==
+
+"@types/jasmine@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.5.0.tgz#2ad2006c8a937d20df20a8fee86071d0f730ef99"
+  integrity sha512-kGCRI9oiCxFS6soGKlyzhMzDydfcPix9PpTkr7h11huxOxhWwP37Tg7DYBaQ18eQTNreZEuLkhpbGSqVNZPnnw==
 
 "@types/jasminewd2@^2.0.8":
   version "2.0.8"
@@ -1131,10 +1136,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.12.tgz#7c6c571cc2f3f3ac4a59a5f2bd48f5bdbc8653cc"
   integrity sha512-KPYGmfD0/b1eXurQ59fXD1GBzhSQfz6/lKBxkaHX9dKTzjXbK68Zt7yGUxUsCS1jeTy/8aL+d9JEr+S54mpkWQ==
 
-"@types/node@^12.11.1":
-  version "12.11.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.1.tgz#1fd7b821f798b7fa29f667a1be8f3442bb8922a3"
-  integrity sha512-TJtwsqZ39pqcljJpajeoofYRfeZ7/I/OMUQ5pR4q5wOKf2ocrUvBAZUMhWsOvKx3dVc/aaV5GluBivt0sWqA5A==
+"@types/node@^12.12.22":
+  version "12.12.22"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.22.tgz#b8d9eae3328b96910a373cf06ac8d3c5abe9c200"
+  integrity sha512-r5i93jqbPWGXYXxianGATOxTelkp6ih/U0WVnvaqAvTqM+0U6J3kw6Xk6uq/dWNRkEVw/0SLcO5ORXbVNz4FMQ==
 
 "@types/q@^0.0.32":
   version "0.0.32"
