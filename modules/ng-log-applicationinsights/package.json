@@ -13,22 +13,22 @@
   },
   "homepage": "https://github.com/dagonmetric/ng-log-applicationinsights",
   "keywords": [
-    "ng-log",
     "angular-application-insights",
-    "microsoft-applicationinsights",
+    "microsoft-applicationinsights-web",
     "azure-application-insights",
     "application-insights",
-    "angular-log-service",
+    "angular-analytics",
+    "angular-logging-service",
     "angular-logging",
     "angular-log",
-    "angular-analytics",
     "angular-telemetry-client",
     "analytics",
     "logging",
     "log",
     "telemetry-client",
     "telemetry",
-    "angular"
+    "angular",
+    "typescript"
   ],
   "sideEffects": false,
   "dependencies": {
