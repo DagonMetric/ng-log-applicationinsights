@@ -94,8 +94,10 @@ export class ApplicationInsightsLogger extends Logger {
                 properties.isLoggedIn = pageViewInfo.is_logged_in;
             }
             if (pageViewInfo.measurements) {
-                properties = properties || {};
-                properties.measurements = pageViewInfo.measurements;
+                properties = {
+                    ...properties,
+                    ...pageViewInfo.measurements
+                };
             }
 
             if (properties) {
