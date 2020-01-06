@@ -17,7 +17,7 @@ The following npm packages are required before using this module.
 * @angular/common >= v8.0.0-beta.0
 * @angular/core >= v8.0.0-beta.0
 * @dagonmetric/ng-log >= v2.2.0
-* @microsoft/applicationinsights-web >= v2.0.1
+* @microsoft/applicationinsights-web >= v2.3.1
 
 ### Installation
 
