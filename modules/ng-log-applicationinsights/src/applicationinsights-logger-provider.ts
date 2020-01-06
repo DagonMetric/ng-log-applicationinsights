@@ -62,6 +62,7 @@ export class ApplicationInsightsLoggerProvider extends Logger implements LoggerP
     }
 
     constructor(
+        // tslint:disable-next-line: ban-types
         @Inject(PLATFORM_ID) platformId: Object,
         @Optional() @Inject(APPLICATIONINSIGHTS_LOGGER_OPTIONS) options?: ApplicationInsightsLoggerOptions) {
         super();
