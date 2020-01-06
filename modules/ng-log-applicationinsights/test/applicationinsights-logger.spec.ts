@@ -79,10 +79,10 @@ describe('ApplicationInsightsLogger', () => {
         expect(appInsights.trackException).toHaveBeenCalledWith({
             exception: err,
             severityLevel: SeverityLevel.Critical,
-            measurements: {
+            properties: {
+                key1: 'value1',
                 avg_page_load_time: 1
-            },
-            properties
+            }
         });
     });
 
@@ -150,9 +150,7 @@ describe('ApplicationInsightsLogger', () => {
         });
         expect(appInsights.startTrackPage).toHaveBeenCalledWith('page7');
         expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page7', '/page7', {
-            measurements: {
-                avg_page_load_time: 1
-            }
+            avg_page_load_time: 1
         });
 
         logger.startTrackPage('page8');
@@ -170,13 +168,11 @@ describe('ApplicationInsightsLogger', () => {
         });
         expect(appInsights.startTrackPage).toHaveBeenCalledWith('page8');
         expect(appInsights.stopTrackPage).toHaveBeenCalledWith('page8', '/page8', {
-            measurements: {
-                avg_page_load_time: 1
-            },
             key1: 'value1',
             refUri: 'https://somewhere.com/',
             pageType: 'testPage',
-            isLoggedIn: false
+            isLoggedIn: false,
+            avg_page_load_time: 1
         });
     });
 
@@ -249,11 +245,9 @@ describe('ApplicationInsightsLogger', () => {
             refUri: 'https://somewhere.com/',
             pageType: 'testPage',
             isLoggedIn: false,
-            measurements: {
-                avgPageLoadTime: 1
-            },
             properties: {
-                key1: 'value1'
+                key1: 'value1',
+                avgPageLoadTime: 1
             }
         });
     });
@@ -274,7 +268,9 @@ describe('ApplicationInsightsLogger', () => {
         });
         expect(appInsights.stopTrackEvent).toHaveBeenCalledWith('event4', {
             key1: 'value1'
-        }, { avg_page_load_time: 1 });
+        }, {
+            avg_page_load_time: 1
+        });
     });
 
     it("should work with 'trackEvent'", () => {
@@ -297,9 +293,7 @@ describe('ApplicationInsightsLogger', () => {
         expect(appInsights.trackEvent).toHaveBeenCalledWith({
             name: 'event2',
             properties: {
-                key1: 'value1'
-            },
-            measurements: {
+                key1: 'value1',
                 avgPageLoadTime: 1
             }
         });
