@@ -36,11 +36,17 @@ export class ApplicationInsightsLogger extends Logger {
                 exception: typeof message === 'string' ? new Error(message) : message,
                 severityLevel,
             };
-            if (logInfo && logInfo.measurements) {
-                exceptionTelemetry.measurements = logInfo.measurements;
-            }
             if (logInfo && logInfo.properties) {
-                exceptionTelemetry.properties = logInfo.properties;
+                exceptionTelemetry.properties = {
+                    ...exceptionTelemetry.properties,
+                    ...logInfo.properties
+                };
+            }
+            if (logInfo && logInfo.measurements) {
+                exceptionTelemetry.properties = {
+                    ...exceptionTelemetry.properties,
+                    ...logInfo.measurements
+                };
             }
             this.appInsights.trackException(exceptionTelemetry);
         } else {
@@ -126,11 +132,17 @@ export class ApplicationInsightsLogger extends Logger {
             if (pageViewInfo.is_logged_in != null) {
                 pageViewTelemetry.isLoggedIn = pageViewInfo.is_logged_in;
             }
-            if (pageViewInfo.measurements) {
-                pageViewTelemetry.measurements = pageViewInfo.measurements;
-            }
             if (pageViewInfo.properties) {
-                pageViewTelemetry.properties = pageViewInfo.properties;
+                pageViewTelemetry.properties = {
+                    ...pageViewTelemetry.properties,
+                    ...pageViewInfo.properties
+                };
+            }
+            if (pageViewInfo.measurements) {
+                pageViewTelemetry.properties = {
+                    ...pageViewTelemetry.properties,
+                    ...pageViewInfo.measurements
+                };
             }
         }
 
@@ -176,11 +188,17 @@ export class ApplicationInsightsLogger extends Logger {
         const eventTelemetry: IEventTelemetry = {
             name: eventInfo.name
         };
-        if (eventInfo.measurements) {
-            eventTelemetry.measurements = eventInfo.measurements;
-        }
         if (eventInfo.properties) {
-            eventTelemetry.properties = eventInfo.properties;
+            eventTelemetry.properties = {
+                ...eventTelemetry.properties,
+                ...eventInfo.properties
+            };
+        }
+        if (eventInfo.measurements) {
+            eventTelemetry.properties = {
+                ...eventTelemetry.properties,
+                ...eventInfo.measurements
+            };
         }
 
         this.appInsights.trackEvent(eventTelemetry);
