@@ -19,7 +19,11 @@ import { AppComponent } from './app.component';
         LogModule.withConfig({
             minLevel: 'debug'
         }),
-        ApplicationInsightsLoggerModule
+        ApplicationInsightsLoggerModule.configure({
+            config: {
+                instrumentationKey: 'b92a4655-8806-45b6-a979-67ebce91d92f'
+            }
+        })
     ],
     bootstrap: [AppComponent]
 })
