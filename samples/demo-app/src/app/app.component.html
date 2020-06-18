@@ -1,0 +1,45 @@
+<header class="toolbar">
+    <h1>NG-LOG - Application Insights Demo</h1>
+</header>
+<main>
+    <p>
+        See output in Microsoft Azure.
+    </p>
+    <section>
+        <div class="title">
+            <code>
+                Logging Trace API
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logTrace()">Log trace</button>
+            <button type="button" (click)="logDebug()">Log debug</button>
+            <button type="button" (click)="logInfo()">Log info</button>
+            <button type="button" (click)="logWarn()">Log warn</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                Logging Error API
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logError()">Log error</button>
+            <button type="button" (click)="logFatal()">Log fatal</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                Tracking API
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="trackPageView()">Track page view</button>
+            <button type="button" (click)="trackEvent()">Track custom event</button>
+        </div>
+    </section>
+</main>
