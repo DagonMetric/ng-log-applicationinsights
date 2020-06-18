@@ -6,7 +6,15 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
+import {
+    EventInfo,
+    EventTimingInfo,
+    LogInfo,
+    LogLevel,
+    Logger,
+    PageViewInfo,
+    PageViewTimingInfo
+} from '@dagonmetric/ng-log';
 import {
     IApplicationInsights,
     IEventTelemetry,
@@ -15,6 +23,21 @@ import {
     ITraceTelemetry,
     SeverityLevel
 } from '@microsoft/applicationinsights-web';
+
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+function toSeverityLevel(logLevel: LogLevel): SeverityLevel {
+    if (logLevel === LogLevel.Critical) {
+        return SeverityLevel.Critical;
+    } else if (logLevel === LogLevel.Error) {
+        return SeverityLevel.Error;
+    } else if (logLevel === LogLevel.Warn) {
+        return SeverityLevel.Warning;
+    } else if (logLevel === LogLevel.Info) {
+        return SeverityLevel.Information;
+    } else {
+        return SeverityLevel.Verbose;
+    }
+}
 
 /**
  * Microsoft ApplicationInsights implementation for `Logger`.
@@ -29,12 +52,12 @@ export class ApplicationInsightsLogger extends Logger {
             return;
         }
 
-        const severityLevel = ApplicationInsightsLogger.toSeverityLevel(logLevel);
+        const severityLevel = toSeverityLevel(logLevel);
 
         if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
             const exceptionTelemetry: IExceptionTelemetry = {
                 exception: typeof message === 'string' ? new Error(message) : message,
-                severityLevel,
+                severityLevel
             };
             if (logInfo && logInfo.properties) {
                 exceptionTelemetry.properties = {
@@ -51,6 +74,7 @@ export class ApplicationInsightsLogger extends Logger {
             this.appInsights.trackException(exceptionTelemetry);
         } else {
             const traceTelemetry: ITraceTelemetry = {
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 message: typeof message === 'string' ? message : `${message}`,
                 severityLevel
             };
@@ -76,7 +100,7 @@ export class ApplicationInsightsLogger extends Logger {
 
         if (pageViewInfo) {
             // tslint:disable-next-line: no-any
-            let properties: { [key: string]: any } | undefined;
+            let properties: { [key: string]: unknown } | undefined;
 
             if (pageViewInfo.properties) {
                 properties = { ...pageViewInfo.properties };
@@ -105,7 +129,6 @@ export class ApplicationInsightsLogger extends Logger {
             } else {
                 this.appInsights.stopTrackPage(name, pageViewInfo.uri);
             }
-
         } else {
             this.appInsights.stopTrackPage(name);
         }
@@ -166,7 +189,7 @@ export class ApplicationInsightsLogger extends Logger {
 
         if (eventInfo) {
             // tslint:disable-next-line: no-any
-            let properties: { [key: string]: any } = {};
+            let properties: { [key: string]: unknown } = {};
 
             if (eventInfo.properties) {
                 properties = { ...eventInfo.properties };
@@ -212,19 +235,5 @@ export class ApplicationInsightsLogger extends Logger {
         }
 
         this.appInsights.flush();
-    }
-
-    private static toSeverityLevel(logLevel: LogLevel): SeverityLevel {
-        if (logLevel === LogLevel.Critical) {
-            return SeverityLevel.Critical;
-        } else if (logLevel === LogLevel.Error) {
-            return SeverityLevel.Error;
-        } else if (logLevel === LogLevel.Warn) {
-            return SeverityLevel.Warning;
-        } else if (logLevel === LogLevel.Info) {
-            return SeverityLevel.Information;
-        } else {
-            return SeverityLevel.Verbose;
-        }
     }
 }
