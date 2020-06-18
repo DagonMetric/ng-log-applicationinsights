@@ -16,12 +16,12 @@ import { AppComponent } from './app.component';
 
         // ng-log imports
         //
-        LogModule.withConfig({
-            minLevel: 'debug'
-        }),
+        LogModule,
         ApplicationInsightsLoggerModule.configure({
             config: {
-                instrumentationKey: 'b92a4655-8806-45b6-a979-67ebce91d92f'
+                instrumentationKey: navigator.webdriver ? '' : 'b92a4655-8806-45b6-a979-67ebce91d92f'
+                // disableTelemetry: navigator.webdriver ? true : false
+                // maxBatchInterval: navigator.webdriver ? 1000 : 10000
             }
         })
     ],
