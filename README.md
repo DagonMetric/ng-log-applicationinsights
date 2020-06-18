@@ -35,7 +35,7 @@ import { ApplicationInsightsLoggerModule } from '@dagonmetric/ng-log-application
 
     // ng-log modules
     LogModule,
-    ApplicationInsightsLoggerModule.withOptions({
+    ApplicationInsightsLoggerModule.configure({
       config: {
         instrumentationKey: 'YOUR_INSTRUMENTATION_KEY_GOES_HERE'
         /* ...Other Configuration Options... */
