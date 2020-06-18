@@ -1,7 +1,6 @@
 # Angular Application Insights Implementation for NG-LOG
 
 [![GitHub Actions Status](https://github.com/DagonMetric/ng-log-applicationinsights/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-log-applicationinsights/actions)
-[![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_apis/build/status/DagonMetric.ng-log-applicationinsights?branchName=master)](https://dev.azure.com/DagonMetric/ng-log-applicationinsights/_build/latest?definitionId=11&branchName=master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights)
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -10,27 +9,18 @@ Microsoft Azure [Application Insights](https://github.com/microsoft/ApplicationI
 
 ## Getting Started
 
-### Prerequisites
-
-The following npm packages are required before using this module.
-
-* @angular/common >= v8.0.0-beta.0
-* @angular/core >= v8.0.0-beta.0
-* @dagonmetric/ng-log >= v2.2.0
-* @microsoft/applicationinsights-web >= v2.3.1
-
 ### Installation
 
 npm
 
 ```bash
-npm install @dagonmetric/ng-log-applicationinsights
+npm install @dagonmetric/ng-log @dagonmetric/ng-log-applicationinsights
 ```
 
 or yarn
 
 ```bash
-yarn add @dagonmetric/ng-log-applicationinsights
+yarn add @dagonmetric/ng-log @dagonmetric/ng-log-applicationinsights
 ```
 
 ### Module Setup (app.module.ts)
