@@ -33,7 +33,7 @@ export class ApplicationInsightsLoggerModule {
      * Call this method to provide options for configuring the `ApplicationInsightsLoggerProvider`.
      * @param options An option object for `ApplicationInsightsLoggerProvider`.
      */
-    static withOptions(options: ApplicationInsightsLoggerOptions): ModuleWithProviders {
+    static configure(options: ApplicationInsightsLoggerOptions): ModuleWithProviders<ApplicationInsightsLoggerModule> {
         return {
             ngModule: ApplicationInsightsLoggerModule,
             providers: [
