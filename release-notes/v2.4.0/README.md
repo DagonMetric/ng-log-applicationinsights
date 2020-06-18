@@ -1,5 +1,6 @@
 ## Changes
 
+* Chage `ApplicationInsightsLoggerModule.withOptions()` to `ApplicationInsightsLoggerModule.configure()`
 * Update docs
 * Update package dependencies
 

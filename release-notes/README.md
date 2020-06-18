@@ -2,7 +2,7 @@
 
 | Date (UTC) | Version |  |  |
 | :-- | :-- | :--: | :-- |
-2020-06-18 | 2.3.1 | [release notes](v2.3.1/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights/v/2.3.1) | - |
+2020-06-18 | 2.4.0 | [release notes](v2.4.0/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights/v/2.4.0) | - |
 2020-01-06 | 2.3.0 | [release notes](v2.3.0/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights/v/2.3.0) | - |
 2019-10-14 | 2.2.1 | [release notes](v2.2.1/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights/v/2.2.1) | - |
 2019-10-14 | 2.2.0 | [release notes](v2.2.0/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights/v/2.2.0) | - |
