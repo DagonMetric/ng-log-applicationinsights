@@ -3,7 +3,7 @@
 [![GitHub Actions Status](https://github.com/DagonMetric/ng-log-applicationinsights/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-log-applicationinsights/actions)
 [![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log-applicationinsights?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build?definitionId=22)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log-applicationinsights)
-[![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
+[![npm version](https://badge.fury.io/js/%40dagonmetric%2Fng-log-applicationinsights.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log-applicationinsights)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Microsoft Azure Application Insights integration of [DagonMetric/ng-log](https://github.com/DagonMetric/ng-log) for Angular applications.
