@@ -1,12 +1,13 @@
-// tslint:disable: no-floating-promises
-
 import { TestBed } from '@angular/core/testing';
 
 import { LogLevel } from '@dagonmetric/ng-log';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
 import { ApplicationInsightsLogger } from '../src/applicationinsights-logger';
-import { APPLICATIONINSIGHTS_LOGGER_OPTIONS, ApplicationInsightsLoggerProvider } from '../src/applicationinsights-logger-provider';
+import {
+    APPLICATIONINSIGHTS_LOGGER_OPTIONS,
+    ApplicationInsightsLoggerProvider
+} from '../src/applicationinsights-logger-provider';
 
 describe('ApplicationInsightsLoggerProvider', () => {
     let loggerProvider: ApplicationInsightsLoggerProvider;
@@ -26,20 +27,18 @@ describe('ApplicationInsightsLoggerProvider', () => {
             ]
         });
 
-        loggerProvider =
-            TestBed.get<ApplicationInsightsLoggerProvider>(ApplicationInsightsLoggerProvider) as ApplicationInsightsLoggerProvider;
-
+        loggerProvider = TestBed.inject<ApplicationInsightsLoggerProvider>(ApplicationInsightsLoggerProvider);
     });
 
     it('should be created', () => {
-        expect(loggerProvider).toBeDefined();
-        expect(loggerProvider.name).toBe('applicationinsights');
+        void expect(loggerProvider).toBeDefined();
+        void expect(loggerProvider.name).toBe('applicationinsights');
     });
 
     it("should create a new logger instance with 'createLogger' method", () => {
         const logger = loggerProvider.createLogger('test');
-        expect(logger instanceof ApplicationInsightsLogger).toBeTruthy();
-        expect((logger as ApplicationInsightsLogger).name).toBe('test');
+        void expect(logger instanceof ApplicationInsightsLogger).toBeTruthy();
+        void expect((logger as ApplicationInsightsLogger).name).toBe('test');
     });
 
     it("should able to call 'setConfig' with  with eager initialization", () => {
@@ -47,7 +46,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         loggerProvider.setConfig({
             instrumentationKey: 'TESTING'
         });
-        expect(appInsights.config.instrumentationKey).toBe('TESTING');
+        void expect(appInsights.config.instrumentationKey).toBe('TESTING');
     });
 
     it("should able to call 'setConfig' with lazy initialization", () => {
@@ -57,7 +56,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         });
 
         const appInsights = loggerProvider2.appInsights as ApplicationInsights;
-        expect(appInsights.config.instrumentationKey).toBe('TESTING');
+        void expect(appInsights.config.instrumentationKey).toBe('TESTING');
     });
 
     it("should able to call 'setConfig' with non platform browser", () => {
@@ -66,7 +65,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
             instrumentationKey: 'TESTING'
         });
 
-        expect(loggerProvider2.appInsights).toBeUndefined();
+        void expect(loggerProvider2.appInsights).toBeUndefined();
     });
 
     it("should work with 'setUserProperties'", () => {
@@ -76,6 +75,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         const userId = 'user1';
         const accountId = 'account1';
         loggerProvider.setUserProperties(userId, accountId);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(appInsights.setAuthenticatedUserContext).toHaveBeenCalledWith(userId, accountId);
 
         // Coverage only, do nothing
@@ -88,7 +88,8 @@ describe('ApplicationInsightsLoggerProvider', () => {
         spyOn(appInsights, 'clearAuthenticatedUserContext');
 
         loggerProvider.clearUserProperties();
-        expect(appInsights.clearAuthenticatedUserContext).toHaveBeenCalled();
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        void expect(appInsights.clearAuthenticatedUserContext).toHaveBeenCalled();
 
         // Coverage only, do nothing
         const loggerProvider2 = new ApplicationInsightsLoggerProvider('server');
@@ -103,6 +104,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         const msg = 'This is a message.';
         const logInfo = { properties: { key1: 'value1' } };
         loggerProvider.log(logLevel, msg, logInfo);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.log).toHaveBeenCalledWith(logLevel, msg, logInfo);
     });
 
@@ -111,6 +113,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         spyOn(currentLogger, 'startTrackPage');
 
         loggerProvider.startTrackPage('page1');
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.startTrackPage).toHaveBeenCalledWith('page1');
     });
 
@@ -121,6 +124,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         const name = 'page1';
         const pageViewInfo = { uri: '/home' };
         loggerProvider.stopTrackPage(name, pageViewInfo);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.stopTrackPage).toHaveBeenCalledWith(name, pageViewInfo);
     });
 
@@ -130,6 +134,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
 
         const pageViewInfo = { name: 'page1', uri: '/home' };
         loggerProvider.trackPageView(pageViewInfo);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.trackPageView).toHaveBeenCalledWith(pageViewInfo);
     });
 
@@ -138,6 +143,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         spyOn(currentLogger, 'startTrackEvent');
 
         loggerProvider.startTrackEvent('event1');
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.startTrackEvent).toHaveBeenCalledWith('event1');
     });
 
@@ -148,6 +154,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         const name = 'event1';
         const eventInfo = { properties: { key1: 'value1' } };
         loggerProvider.stopTrackEvent(name, eventInfo);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
     });
 
@@ -157,6 +164,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
 
         const eventInfo = { name: 'event1', eventCategory: 'test' };
         loggerProvider.trackEvent(eventInfo);
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(currentLogger.trackEvent).toHaveBeenCalledWith(eventInfo);
     });
 
@@ -165,6 +173,7 @@ describe('ApplicationInsightsLoggerProvider', () => {
         spyOn(currentLogger, 'flush');
 
         loggerProvider.flush();
-        expect(currentLogger.flush).toHaveBeenCalled();
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        void expect(currentLogger.flush).toHaveBeenCalled();
     });
 });

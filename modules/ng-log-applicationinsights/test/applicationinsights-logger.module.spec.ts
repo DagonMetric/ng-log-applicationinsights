@@ -1,5 +1,3 @@
-// tslint:disable: no-floating-promises
-
 import { TestBed } from '@angular/core/testing';
 
 import { LOGGER_PROVIDER, LoggerProvider } from '@dagonmetric/ng-log';
@@ -14,22 +12,20 @@ import { ApplicationInsightsLoggerModule } from '../src/applicationinsights-logg
 describe('ApplicationInsightsLoggerModule', () => {
     it("should provide 'ApplicationInsightsLoggerProvider'", () => {
         TestBed.configureTestingModule({
-            imports: [
-                ApplicationInsightsLoggerModule
-            ]
+            imports: [ApplicationInsightsLoggerModule]
         });
 
-        const loggerProviders = TestBed.get<ApplicationInsightsLoggerProvider[]>(LOGGER_PROVIDER);
+        const loggerProviders = TestBed.inject<ApplicationInsightsLoggerProvider[]>(LOGGER_PROVIDER);
 
-        expect(loggerProviders).toBeDefined();
-        expect((loggerProviders as LoggerProvider[])[0] instanceof ApplicationInsightsLoggerProvider).toBeTruthy();
+        void expect(loggerProviders).toBeDefined();
+        void expect((loggerProviders as LoggerProvider[])[0] instanceof ApplicationInsightsLoggerProvider).toBeTruthy();
     });
 
-    describe('withOptions', () => {
+    describe('configure', () => {
         it("should provide 'APPLICATIONINSIGHTS_LOGGER_OPTIONS' value", () => {
             TestBed.configureTestingModule({
                 imports: [
-                    ApplicationInsightsLoggerModule.withOptions({
+                    ApplicationInsightsLoggerModule.configure({
                         config: {
                             instrumentationKey: 'TEST'
                         }
@@ -37,11 +33,10 @@ describe('ApplicationInsightsLoggerModule', () => {
                 ]
             });
 
-            const options = TestBed
-                .get<ApplicationInsightsLoggerOptions>(APPLICATIONINSIGHTS_LOGGER_OPTIONS) as ApplicationInsightsLoggerOptions;
+            const options = TestBed.inject<ApplicationInsightsLoggerOptions>(APPLICATIONINSIGHTS_LOGGER_OPTIONS);
 
-            expect(options).toBeDefined();
-            expect(options.config.instrumentationKey).toBe('TEST');
+            void expect(options).toBeDefined();
+            void expect(options.config.instrumentationKey).toBe('TEST');
         });
     });
 });
