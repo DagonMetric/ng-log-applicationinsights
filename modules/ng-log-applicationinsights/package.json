@@ -1,7 +1,7 @@
 {
   "name": "@dagonmetric/ng-log-applicationinsights",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Angular Azure Application Insights implementation for @dagonmetric/ng-log.",
+  "description": "Microsoft Azure Application Insights integration of @dagonMetric/ng-log for Angular applications.",
   "author": "DagonMetric",
   "license": "MIT",
   "repository": {
