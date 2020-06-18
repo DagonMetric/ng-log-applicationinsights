@@ -99,7 +99,6 @@ export class ApplicationInsightsLogger extends Logger {
         }
 
         if (pageViewInfo) {
-            // tslint:disable-next-line: no-any
             let properties: { [key: string]: unknown } | undefined;
 
             if (pageViewInfo.properties) {
@@ -188,7 +187,6 @@ export class ApplicationInsightsLogger extends Logger {
         }
 
         if (eventInfo) {
-            // tslint:disable-next-line: no-any
             let properties: { [key: string]: unknown } = {};
 
             if (eventInfo.properties) {
