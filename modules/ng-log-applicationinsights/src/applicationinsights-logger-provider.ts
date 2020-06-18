@@ -12,10 +12,10 @@ import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angu
 import {
     EventInfo,
     EventTimingInfo,
-    Logger,
-    LoggerProvider,
     LogInfo,
     LogLevel,
+    Logger,
+    LoggerProvider,
     PageViewInfo,
     PageViewTimingInfo
 } from '@dagonmetric/ng-log';
@@ -27,91 +27,97 @@ export interface ApplicationInsightsLoggerOptions {
     config: IConfiguration & IConfig;
 }
 
-export const APPLICATIONINSIGHTS_LOGGER_OPTIONS = new InjectionToken<ApplicationInsightsLoggerOptions>('ApplicationInsightsLoggerOptions');
+export const APPLICATIONINSIGHTS_LOGGER_OPTIONS = new InjectionToken<ApplicationInsightsLoggerOptions>(
+    'ApplicationInsightsLoggerOptions'
+);
 
 /**
  * Logger provider implementation for `ApplicationInsightsLogger`.
  */
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class ApplicationInsightsLoggerProvider extends Logger implements LoggerProvider {
-    private readonly _isBrowser: boolean;
-    private readonly _appInsights?: ApplicationInsights;
-    private _initialized = false;
+    private readonly isBrowser: boolean;
+    private readonly appInsightsInternal?: ApplicationInsights;
+    private initialized = false;
 
-    private _config?: IConfiguration & IConfig;
-    private _currentLogger?: ApplicationInsightsLogger;
+    private config?: IConfiguration & IConfig;
+    private currentLoggerInternal?: ApplicationInsightsLogger;
 
     get name(): string {
         return 'applicationinsights';
     }
 
     get currentLogger(): ApplicationInsightsLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
+        if (this.currentLoggerInternal) {
+            return this.currentLoggerInternal;
         }
 
-        this._currentLogger = new ApplicationInsightsLogger('', this._appInsights);
+        this.currentLoggerInternal = new ApplicationInsightsLogger('', this.appInsightsInternal);
 
-        return this._currentLogger;
+        return this.currentLoggerInternal;
     }
 
     get appInsights(): ApplicationInsights | undefined {
-        return this._appInsights;
+        return this.appInsightsInternal;
     }
 
     constructor(
-        // tslint:disable-next-line: ban-types
+        // eslint-disable-next-line @typescript-eslint/ban-types
         @Inject(PLATFORM_ID) platformId: Object,
-        @Optional() @Inject(APPLICATIONINSIGHTS_LOGGER_OPTIONS) options?: ApplicationInsightsLoggerOptions) {
+        @Optional() @Inject(APPLICATIONINSIGHTS_LOGGER_OPTIONS) options?: ApplicationInsightsLoggerOptions
+    ) {
         super();
-        this._isBrowser = isPlatformBrowser(platformId);
-        this._config = options && options.config ? options.config : {
-            instrumentationKey: ''
-        };
+        this.isBrowser = isPlatformBrowser(platformId);
+        this.config =
+            options && options.config
+                ? options.config
+                : {
+                      instrumentationKey: ''
+                  };
 
-        if (this._isBrowser) {
-            this._appInsights = new ApplicationInsights({
-                config: this._config
+        if (this.isBrowser) {
+            this.appInsightsInternal = new ApplicationInsights({
+                config: this.config
             });
 
-            if (this._config.instrumentationKey) {
-                this._appInsights.loadAppInsights();
-                this._config = this._appInsights.config;
-                this._initialized = true;
+            if (this.config.instrumentationKey) {
+                this.appInsightsInternal.loadAppInsights();
+                this.config = this.appInsightsInternal.config;
+                this.initialized = true;
             }
         }
     }
 
     setConfig(config: IConfiguration & IConfig): void {
-        if (this._appInsights) {
-            this._appInsights.config = { ...this._appInsights.config, ...this._config, ...config };
-            this._config = this._appInsights.config;
+        if (this.appInsightsInternal) {
+            this.appInsightsInternal.config = { ...this.appInsightsInternal.config, ...this.config, ...config };
+            this.config = this.appInsightsInternal.config;
 
-            if (!this._initialized && this._isBrowser) {
-                this._appInsights.loadAppInsights();
-                this._config = this._appInsights.config;
-                this._initialized = true;
+            if (!this.initialized && this.isBrowser) {
+                this.appInsightsInternal.loadAppInsights();
+                this.config = this.appInsightsInternal.config;
+                this.initialized = true;
             }
         } else {
-            this._config = { ...this._config, ...config };
+            this.config = { ...this.config, ...config };
         }
     }
 
     createLogger(category: string): Logger {
-        return new ApplicationInsightsLogger(category, this._appInsights);
+        return new ApplicationInsightsLogger(category, this.appInsightsInternal);
     }
 
     setUserProperties(userId: string, accountId?: string): void {
-        if (this._isBrowser && this._initialized && this._appInsights) {
-            this._appInsights.setAuthenticatedUserContext(userId, accountId);
+        if (this.isBrowser && this.initialized && this.appInsightsInternal) {
+            this.appInsightsInternal.setAuthenticatedUserContext(userId, accountId);
         }
     }
 
     clearUserProperties(): void {
-        if (this._isBrowser && this._initialized && this._appInsights) {
-            this._appInsights.clearAuthenticatedUserContext();
+        if (this.isBrowser && this.initialized && this.appInsightsInternal) {
+            this.appInsightsInternal.clearAuthenticatedUserContext();
         }
     }
 
