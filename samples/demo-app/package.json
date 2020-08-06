@@ -18,7 +18,7 @@
     "@angular/router": "^10.0.8",
     "@dagonmetric/ng-log": "^2.2.6",
     "@dagonmetric/ng-log-applicationinsights": "^2.4.1",
-    "@microsoft/applicationinsights-web": "^2.5.6",
+    "@microsoft/applicationinsights-web": "^2.5.7",
     "rxjs": "^6.6.2",
     "tslib": "~2.0.0",
     "zone.js": "^0.10.3"
