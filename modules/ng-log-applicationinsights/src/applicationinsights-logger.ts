@@ -24,7 +24,6 @@ import {
     SeverityLevel
 } from '@microsoft/applicationinsights-web';
 
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 function toSeverityLevel(logLevel: LogLevel): SeverityLevel {
     if (logLevel === LogLevel.Critical) {
         return SeverityLevel.Critical;
