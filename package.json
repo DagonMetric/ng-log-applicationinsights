@@ -23,7 +23,7 @@
     "@angular/common": "^11.2.14",
     "@angular/core": "^11.2.14",
     "@dagonmetric/ng-log": "^2.3.3",
-    "@microsoft/applicationinsights-web": "^2.8.1",
+    "@microsoft/applicationinsights-web": "^2.8.3",
     "rxjs": "^7.5.5",
     "tslib": "~2.4.0"
   },
