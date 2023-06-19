@@ -30,6 +30,6 @@
     "@angular/language-service": "^11.2.14",
     "@types/node": "^16.11.41",
     "ts-node": "~10.8.1",
-    "typescript": "~4.1.5"
+    "typescript": "~4.9.5"
   }
 }
